@@ -1,1 +1,33 @@
+use strict;
+use warnings;
 
+# Путь к файлу конфигурации
+my $conf_path = 'D:\Perl\conf.ini';
+
+# Функция для чтения и обработки файла конфигурации
+sub _read_config {
+    my ( $filename ) = @_;
+    open my $fh, '<', $filename or do {
+        print "Не удалось считать конфигурацию с файла: '$filename'";
+        return;
+    };
+    my @lines = <$fh>;
+    close $fh;
+
+    my %config;
+    foreach my $line ( @lines ) {
+        chomp $line; 
+        $line =~ s/\s//g;  #удаляем пробелы
+        next if $line eq "" || $line =~ /^#/;  # проускаем пустые строки и комментарии
+        if ( my ( $key, $value ) = split( /=/, $line, 2 )) {
+            $config{$key} = $value if $key && $value;
+        }
+    }
+    return %config;
+}
+
+# Чтение и вывод конфигурации
+my %conf_hash = _read_config( $conf_path );
+foreach my $key ( keys %conf_hash ) {
+    print "$key => $conf_hash{$key}\n";
+}
