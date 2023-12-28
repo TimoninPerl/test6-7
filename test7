@@ -1,1 +1,11 @@
+use strict;
+use warnings;
+use lib 'D:\Perl';
+use tools; #пакет с функциями
+my $conf_path = 'D:\Perl\conf.ini'; #конфигурация
 
+# Чтение и вывод конфигурации
+my %conf_hash = tools::read_config($conf_path);
+foreach my $key (keys %conf_hash) {
+    print "$key => $conf_hash{$key}\n";
+}
